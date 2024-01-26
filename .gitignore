@@ -1,0 +1,10 @@
+__pycache__
+.env
+env
+test_db.db
+print_tree.py
+sql_app.db
+.node_modules
+/node_modules
+nginx/my-site.cert
+nginx/my-site.key
