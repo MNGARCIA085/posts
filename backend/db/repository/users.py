@@ -38,7 +38,6 @@ async def read_users(f:UserFilter,db = Depends(get_database)) -> dict:
     start_index = (f.page - 1) * f.page_size
     # query
     query = get_query(f)
-    print(query)
     async for user in db['users'].find(query).skip(start_index).limit(f.page_size):
         users.append(user_helper(user))
     return users

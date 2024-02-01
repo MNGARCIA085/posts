@@ -21,30 +21,3 @@ app = start_application()
 
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
-
-
-
-@app.get("/try")
-async def read_items(db = Depends(get_database)):
-    # Realizar operaciones con la base de datos
-    collection = db["aux"]
-    data = {'Estado':'ok'}
-    result = await collection.insert_one(data)
-    return {"message": "Operaciones realizadas"}
-
-
-"""
-router = APIRouter()
-
-@router.get("/")
-async def read_items(db = Depends(get_database)):
-    # Realizar operaciones con la base de datos
-    collection = db["aux"]
-    data = {'Estado':'ok'}
-    result = await collection.insert_one(data)
-    return {"message": "Operaciones realizadas"}
-"""

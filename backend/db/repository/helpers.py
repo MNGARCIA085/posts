@@ -1,6 +1,6 @@
-
 from db.models.users import UserFilter
-
+from db.models.posts import PostFilter
+from bson import ObjectId
 
 # renderizar correctamente
 def user_helper(user) -> dict:
@@ -11,10 +11,6 @@ def user_helper(user) -> dict:
         "last_name": user["last_name"],
         "email": user["email"],
     }
-
-
-
-
 
 
 # consulta
@@ -51,3 +47,48 @@ def get_query(f:UserFilter):
     return query
 
 
+
+#########################  2. POSTS ################################
+
+# renderizar post
+def post_helper(post,author) -> dict:
+    return {
+            "id": str(post['_id']),
+            "title": post['title'],
+            "content": post['content'],
+            "date": post['date'],
+            "last_modified": post['last_modified'],
+            "author": {
+                "id": str(author['_id']),
+                "first_name": author['first_name'],
+                "last_name": author['last_name'],
+                "username": author['username'],
+                "email": author['email']
+            },
+            "comments" : post.get('comments', [])
+        }
+
+
+
+def get_post_query(f:PostFilter):
+    query = {}
+    
+    if f.title:
+        query["title"] = f.title
+    if f.title__contains: # gana si pongo ambos
+        query['title'] = {"$regex": f".*{f.title__contains}.*", "$options": "i"}
+
+    if f.content:
+        query["content"] = f.content
+    if f.content__contains: # gana si pongo ambos
+        query['content'] = {"$regex": f".*{f.content__contains}.*", "$options": "i"}
+
+
+    if f.author:
+        query["author"] = ObjectId(f.author)
+
+    if f.author__username:
+        query["author.username"] = f.author__username    
+    
+
+    return query
